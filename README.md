@@ -1,84 +1,118 @@
 SQL View Management System
 
-This project demonstrates how to create and use SQL Views in MySQL using three custom tables: customers, clothes, and purchase. It includes table creation, data insertion, and multiple view definitions following the requirements of Lab 9, with a focus on understanding how virtual tables work in relational databases.
+A MySQL-based project demonstrating the creation and management of SQL Views using a simple relational database containing customers, clothes, and purchase data.
+The project showcases how views can simplify queries, filter records, and combine data from multiple tables without altering the base tables.
 
-Project Overview
+Features
 
-The goal of this project is to practice creating SQL views that simplify data access, combine information from multiple tables, and filter records without modifying the original data.
-The project includes:
+Structured relational database with 3 tables
 
-Creating the base tables
+Demonstrates different types of SQL views
 
-Inserting sample data
+Includes joins, filtering, and selective column views
 
-Creating multiple SQL views
+Allows inserting into views to update the base table
 
-Querying, inserting, and deleting through views
+Clean and simple dataset for learning
+
+Fully written in standard MySQL syntax
 
 Database Structure
-1. customers
+1. customers Table
+CREATE TABLE customers (
+    name VARCHAR(20),
+    age INT,
+    customerID INT PRIMARY KEY,
+    rating DECIMAL(3,1)
+);
 
-name
+2. clothes Table
+CREATE TABLE clothes (
+    clothesID INT PRIMARY KEY,
+    clothesName VARCHAR(50),
+    clothesColor VARCHAR(20)
+);
 
-age
+3. purchase Table
+CREATE TABLE purchase (
+    purName VARCHAR(50),
+    ID INT,
+    FOREIGN KEY (ID) REFERENCES clothes(clothesID)
+);
 
-customerID (primary key)
+Sample Data
+Customers
+INSERT INTO customers (name, age, customerID, rating) VALUES
+('Layan', 22, 101, 4.8),
+('Sara', 19, 102, 4.5),
+('Faisal', 25, 103, 4.9),
+('Nora', 30, 104, 3.9),
+('Omar', 27, 105, 4.2);
 
-rating
+Clothes
+INSERT INTO clothes VALUES
+(1, 'T-Shirt', 'red'),
+(2, 'Jeans', 'blue'),
+(3, 'Hoodie', 'black'),
+(4, 'Dress', 'red'),
+(5, 'Jacket', 'green');
 
-2. clothes
-
-clothesID (primary key)
-
-clothesName
-
-clothesColor
-
-3. purchase
-
-purName
-
-ID (foreign key referencing clothesID)
+Purchase
+INSERT INTO purchase VALUES
+('First Purchase', 1),
+('Second Purchase', 4),
+('Third Purchase', 2),
+('Winter Purchase', 3),
+('Gift Purchase', 5);
 
 Views Implemented
-V1
+V1 — All Customer Data
+CREATE VIEW V1 AS
+SELECT * FROM customers;
 
-Shows all customer data.
+V2 — Customer Name + Age
+CREATE VIEW V2 AS
+SELECT name, age FROM customers;
 
-V2
+V3 — Customers + Clothes (Joined)
+CREATE VIEW V3 AS
+SELECT c.name AS customerName,
+       c.age,
+       cl.clothesName,
+       cl.clothesColor
+FROM customers AS c
+JOIN clothes AS cl
+ON c.customerID = cl.clothesID;
 
-Shows only customer name and age.
+V4 — Only Red Clothes
+CREATE VIEW V4 AS
+SELECT *
+FROM clothes
+WHERE clothesColor = 'red';
 
-V3
+How to Use This Project
 
-Combines customer information with clothes information.
+Clone the repository
 
-V4
+Run the table creation SQL scripts
 
-Shows only clothes with the color "red".
+Insert the sample data
 
-How to Use
+Apply all view creation commands
 
-Create the database and tables in MySQL.
+Test the views using queries such as:
 
-Insert the provided sample data.
+SELECT * FROM V1 WHERE age > 20;
+Purpose of the Project
 
-Run the CREATE VIEW statements.
+This project provides hands-on experience with:
 
-Execute test queries on each view.
+Virtual tables
 
-Insert or delete through views as needed.
+SQL views
 
-Purpose
+Table joins
 
-This project provides a clear demonstration of:
+Filtering data
 
-Virtual table creation
-
-Working with SQL views
-
-Joining multiple tables
-
-Applying filters on views
-
-It serves as a practical exercise for understanding how to manage views effectively inside a MySQL environment.
+Understanding how views interact with base tables
